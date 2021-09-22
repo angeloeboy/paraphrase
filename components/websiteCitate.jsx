@@ -52,8 +52,9 @@ let WebsiteCitate = ({ populateReferences }) => {
     });
 
     authArr.push(added);
-    // console.log(authArr);
     setauthor([...authArr]);
+    setaddedAuthorInitial("");
+    setaddedAuthorName("");
   };
 
   let getWebsiteData = () => {
@@ -153,6 +154,8 @@ let WebsiteCitate = ({ populateReferences }) => {
   };
   return (
     <div className="web-citation">
+      <h1 className="citation-title">Website Citation</h1>
+
       <label>Website Link</label>
       <input
         type="text"
@@ -167,11 +170,8 @@ let WebsiteCitate = ({ populateReferences }) => {
       />
 
       <div className="result">
-        <label> Author(s) </label>
-
         <div className="author">
-          Add Author
-          <button onClick={() => addAuthor()}>Add</button>
+          Author(s)
           <div>
             <label className="initial">
               Initials
@@ -189,11 +189,11 @@ let WebsiteCitate = ({ populateReferences }) => {
                 onChange={(e) => setaddedAuthorName(e.target.value)}
               />
             </label>
+            <button onClick={() => addAuthor()}>Add</button>
           </div>
         </div>
 
         <div className="author">
-          Author list
           {author.map((auth, index) => {
             return (
               <div key={index}>

@@ -6,18 +6,25 @@ import BookCitate from "../components/bookCitate";
 
 let Div = styled.div`
   .citation-tool {
+    .citation-title {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
     .buttons {
       margin-bottom: 2rem;
       display: flex;
       justify-content: center;
       button {
-        padding: 0.5rem 1rem;
-        font-weight: 1rem;
+        padding: 1rem 2rem;
+        min-width: 200px;
+        font-size: 1rem;
         margin: 0px 1rem;
-        min-width: 100px;
         border: 1px solid #63744d;
         cursor: pointer;
         color: black;
+        background-color: #63744d;
+        color: white;
       }
 
       .selected {
@@ -26,6 +33,7 @@ let Div = styled.div`
         background-color: #63744d;
       }
     }
+
     .container {
       display: flex;
       justify-content: space-between;
@@ -46,7 +54,7 @@ let Div = styled.div`
         background-color: rgb(250, 250, 250);
 
         label {
-          margin-left: 0.5rem;
+          margin-right: 0.5rem;
           font-weight: 400;
         }
 
@@ -77,9 +85,19 @@ let Div = styled.div`
         }
 
         .author {
+          button {
+            padding: 1rem;
+            min-width: 100px;
+            margin: 10px;
+            border: 1px solid #63744d;
+            cursor: pointer;
+            color: black;
+            background-color: #63744d;
+            color: white;
+          }
           div {
             display: flex;
-            align-items: center;
+            align-items: flex-end;
           }
         }
 
@@ -151,6 +169,7 @@ let Div = styled.div`
 let Citate = () => {
   const [references, setreferences] = useState([]);
   const [websiteCitationVisible, setwebsiteCitationVisible] = useState(true);
+
   let populateReferences = () => {
     let references = localStorage.getItem("sources");
     setreferences(JSON.parse(references));
