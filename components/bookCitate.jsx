@@ -21,24 +21,28 @@ let BookCitate = () => {
   const [books, setbooks] = useState([]);
   const [bookSearchString, setbookSearchString] = useState("");
   const [booksVisible, setbooksVisible] = useState(false);
+  const [authorList, setauthorList] = useState("");
+  const [addedAuthorInitial, setaddedAuthorInitial] = useState("");
+  const [addedAuthorName, setaddedAuthorName] = useState("");
 
-  // useEffect(() => {
-  //   let text = "";
-  //   author.map((aut, index) => {
-  //     if (index != 0) {
-  //       if (index + 1 == author.length && author.length !== 1) {
-  //         text = ` ${text} and ${aut.family}, ${aut.initials}`;
-  //       } else {
-  //         text = `${text} ${aut.family}, ${aut.initials},`;
-  //       }
-  //     } else {
-  //       text = `${text} ${aut.family}, ${aut.initials}`;
-  //     }
-  //   });
+  useEffect(() => {
+    let text = "";
+    author.map((aut, index) => {
+      if (index != 0) {
+        if (index + 1 == author.length && author.length !== 1) {
+          text = ` ${text} and ${aut.lastname}, ${aut.initials}`;
+        } else {
+          text = `${text} ${aut.lastname}, ${aut.initials},`;
+        }
+      } else {
+        text = `${text} ${aut.lastname}, ${aut.initials}`;
+      }
+    });
 
-  //   console.log(author.length);
-  //   setauthorList(text);
-  // }, [author]);
+    console.log(author.length);
+    setauthorList(text);
+    console.log(text);
+  }, [author]);
 
   let getBooks = () => {
     setloading(true);
@@ -84,11 +88,68 @@ let BookCitate = () => {
   };
 
   let bookClicked = (book) => {
+    let authorArr = [];
+
+    book.authors.map((author) => {
+      let authorDetails = {
+        lastname: author.split(" ").pop(),
+        initials: author.split(" ")[0].split("")[0],
+      };
+
+      authorArr.push(authorDetails);
+    });
+
     setyear(book.datePublished);
     settitle(book.title);
     setpublisher(book.publisher);
-    setauthor(book.authors);
+    setauthor(authorArr);
     setbooksVisible(false);
+    console.log(authorArr);
+  };
+
+  let handleDelete = (i) => {
+    let arr = author;
+
+    arr.splice(i, 1);
+
+    console.log(arr);
+    setauthor([...arr]);
+  };
+
+  let handleAuthorInitialsEdit = (e) => {
+    let index = e.currentTarget.dataset.index;
+
+    let authorArr = author;
+    authorArr[index].initials = e.target.value;
+    console.log(authorArr[index].initials);
+    setauthor([...authorArr]);
+  };
+
+  let handleAuthorNameEdit = (e) => {
+    let index = e.currentTarget.dataset.index;
+
+    let authorArr = author;
+    authorArr[index].family = e.target.value;
+    console.log(authorArr[index].initials);
+    setauthor([...authorArr]);
+  };
+
+  let addAuthor = () => {
+    let added = {
+      initials: addedAuthorInitial,
+      lastname: addedAuthorName,
+    };
+
+    let authArr = author.filter((auth) => {
+      if (auth.initials !== undefined && auth.lastname !== undefined) {
+        return true;
+      }
+    });
+
+    authArr.push(added);
+    setauthor([...authArr]);
+    setaddedAuthorInitial("");
+    setaddedAuthorName("");
   };
 
   return (
@@ -105,6 +166,7 @@ let BookCitate = () => {
       </label>
       {booksVisible && (
         <div className="books">
+          <h1>Select which book</h1>
           {books.map((book, index) => {
             return (
               <div
@@ -125,16 +187,16 @@ let BookCitate = () => {
             Initials
             <input
               type="text"
-              //   value={addedAuthorInitial}
-              //   onChange={(e) => setaddedAuthorInitial(e.target.value)}
+              value={addedAuthorInitial}
+              onChange={(e) => setaddedAuthorInitial(e.target.value)}
             />
           </label>
           <label>
             Surname
             <input
               type="text"
-              //   value={addedAuthorName}
-              //   onChange={(e) => setaddedAuthorName(e.target.value)}
+              value={addedAuthorName}
+              onChange={(e) => setaddedAuthorName(e.target.value)}
             />
           </label>
           <button onClick={() => addAuthor()}>Add</button>
@@ -148,18 +210,18 @@ let BookCitate = () => {
                 Initials
                 <input
                   type="text"
-                  value={auth ? auth : ""}
+                  value={auth.initials ? auth.initials : ""}
                   data-index={index}
-                  //   onChange={(e) => handleAuthorInitialsEdit(e)}
+                  onChange={(e) => handleAuthorInitialsEdit(e)}
                 />
               </label>
               <label>
                 Surname
                 <input
                   type="text"
-                  value={auth.family !== undefined ? auth.family : ""}
+                  value={auth.lastname ? auth.lastname : ""}
                   data-index={index}
-                  //   onChange={(e) => handleAuthorNameEdit(e)}
+                  onChange={(e) => handleAuthorNameEdit(e)}
                 />
               </label>
 
@@ -202,8 +264,10 @@ let BookCitate = () => {
       </label>
 
       <p className="text-result">
-        {year ? `(${year})` : ""} {title}{" "}
-        {publicationPlace ? `${publicationPlace}: ` : ""} {publisher}
+        {authorList}
+        {year ? `(${year})` : " "} {title}.{" "}
+        {publicationPlace ? `${publicationPlace}: ` : ""}{" "}
+        {publisher ? `${publisher}.` : ""}
       </p>
 
       <div className="cite btn" onClick={() => getBooks()}>

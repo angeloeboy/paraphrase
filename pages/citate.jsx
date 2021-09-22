@@ -78,10 +78,6 @@ let Div = styled.div`
 
         .date-accessed {
           display: flex;
-
-          label {
-            /* margin-left: 0px; */
-          }
         }
 
         .author {
