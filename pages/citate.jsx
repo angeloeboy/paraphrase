@@ -172,7 +172,12 @@ let Citate = () => {
 
   let populateReferences = () => {
     let references = localStorage.getItem("sources");
-    setreferences(JSON.parse(references));
+
+    if (references == undefined) {
+      setreferences([]);
+    } else {
+      setreferences(JSON.parse(references));
+    }
   };
 
   return (
