@@ -120,7 +120,6 @@ let Div = styled.div`
         width: 50%;
 
         .references {
-          // background-color: red;
           .reference-item {
             padding: 1rem;
             background-color: rgb(245, 245, 245);
@@ -128,8 +127,21 @@ let Div = styled.div`
             cursor: pointer;
             border-radius: 0.5rem;
             width: 100%;
-            // word-break: break-all;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
           }
+        }
+        button {
+          padding: 1rem 2rem;
+          /* min-width: 200px; */
+          font-size: 1rem;
+          margin: 0px 1rem;
+          border: 1px solid #63744d;
+          cursor: pointer;
+          color: black;
+          background-color: #63744d;
+          color: white;
         }
       }
 
