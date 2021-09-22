@@ -159,7 +159,7 @@ let Paraphrase = () => {
       redirect: "follow",
     };
 
-    fetch("http://localhost:3000/api/paraphrase", requestOptions)
+    fetch("/api/paraphrase", requestOptions)
       .then((response) => response.json())
       .then((result) => {
         setresultText(result.text[0]);
