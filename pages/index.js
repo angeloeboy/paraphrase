@@ -6,20 +6,6 @@ import Link from 'next/link'
 export default function Home() {
   const [name, setName] = useState("");
 
-  useEffect(() => {
-
-    fetch("/api/hello")
-      .then(response => response.json())
-      .then(data => {
-        console.log(data)
-        setName(data.name)
-      })
-      .catch(error => {
-        console.log(error)
-      })
-
-  }, [])
-
   return (
     <div >
       <Head>

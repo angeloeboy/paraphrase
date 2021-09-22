@@ -26,7 +26,6 @@ let WebsiteCitate = ({ populateReferences }) => {
       }
     });
 
-    console.log(author.length);
     setauthorList(text);
   }, [author]);
 
@@ -34,10 +33,6 @@ let WebsiteCitate = ({ populateReferences }) => {
     let referencesArr = localStorage.getItem("sources");
     populateReferences();
   }, []);
-
-  useEffect(() => {
-    console.log("testingg");
-  }, [author]);
 
   let addAuthor = () => {
     let added = {

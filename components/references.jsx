@@ -31,12 +31,12 @@ let References = (props) => {
       <div className="references" id="references">
         {props.references.map((reference, index) => {
           return (
-            <>
+            <div key={index}>
               <p className="reference-item">{reference}</p>
               <button onClick={(e) => deleteReference(e)} data-index={index}>
                 delete
               </button>
-            </>
+            </div>
           );
         })}
       </div>
