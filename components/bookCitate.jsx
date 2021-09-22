@@ -11,7 +11,7 @@ const Div = styled.div`
   }
 `;
 
-let BookCitate = () => {
+let BookCitate = ({ populateReferences }) => {
   const [author, setauthor] = useState([]);
   const [year, setyear] = useState("");
   const [title, settitle] = useState("");
@@ -132,6 +132,30 @@ let BookCitate = () => {
     authorArr[index].family = e.target.value;
     console.log(authorArr[index].initials);
     setauthor([...authorArr]);
+  };
+
+  let addReference = () => {
+    if (title !== "") {
+      let references = localStorage.getItem("sources");
+      let referencesArr = [];
+      let text = `${authorList}
+      ${year ? `(${year})` : " "} ${title}.
+      ${publicationPlace ? `${publicationPlace}: ` : ""}
+      ${publisher ? `${publisher}.` : ""})`;
+
+      if (references == undefined) {
+        console.log("undefined");
+        referencesArr.push(text);
+        localStorage.setItem("sources", JSON.stringify(referencesArr));
+      } else {
+        referencesArr = JSON.parse(references);
+        console.log(referencesArr);
+        referencesArr.push(text);
+        localStorage.setItem("sources", JSON.stringify(referencesArr));
+      }
+
+      populateReferences();
+    }
   };
 
   let addAuthor = () => {
@@ -273,7 +297,7 @@ let BookCitate = () => {
       <div className="cite btn" onClick={() => getBooks()}>
         <span>{loading ? "Loading" : "Cite"}</span>
       </div>
-      <div className="add-citation btn">
+      <div className="add-citation btn" onClick={() => addReference()}>
         <span>Add to references</span>
       </div>
     </Div>
