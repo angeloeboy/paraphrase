@@ -24,10 +24,8 @@ export default function handler(req, res) {
         fetch("https://paraphraser.prod.hipcv.com/paraphrase", requestOptions)
             .then(response => response.json())
             .then(result => {
-                // console.log(result)
                 let textResult = result.data;
                 res.send({text: textResult})
-                // console.log(textResult)
             })
             .catch(error => console.log('error', error));
 

@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import References from "./../components/references";
 import WebsiteCitate from "../components/websiteCitate";
 import BookCitate from "../components/bookCitate";
+import { motion } from "framer-motion";
 
 let Div = styled.div`
   .citation-tool {
@@ -114,6 +115,19 @@ let Div = styled.div`
           background-color: #63744d;
           margin-right: 20px;
         }
+
+        .success {
+          background-color: #acc58c;
+          color: white;
+          padding: 1rem;
+          font-size: 1rem;
+          position: fixed;
+          width: 200px;
+          text-align: center;
+          top: 2rem;
+          left: 50%;
+          transform: translateX(-50%);
+        }
       }
 
       .citation-links {
@@ -177,6 +191,7 @@ let Div = styled.div`
 let Citate = () => {
   const [references, setreferences] = useState([]);
   const [websiteCitationVisible, setwebsiteCitationVisible] = useState(true);
+  const [showSuccess, setshowSuccess] = useState(false);
 
   let populateReferences = () => {
     let references = localStorage.getItem("sources");
@@ -203,11 +218,35 @@ let Citate = () => {
                 Book
               </button>
             </div>
+            {showSuccess && (
+              <motion.div
+                initial="pageInitial"
+                animate="pageAnimate"
+                exit={{ opacity: 0 }}
+                variants={{
+                  pageInitial: {
+                    opacity: 0,
+                  },
+                  pageAnimate: {
+                    opacity: 1,
+                  },
+                }}
+              >
+                <div className="success">Success!</div>
+              </motion.div>
+            )}
 
+            <button onClick={() => setshowSuccess(!showSuccess)}>click</button>
             {websiteCitationVisible ? (
-              <WebsiteCitate populateReferences={populateReferences} />
+              <WebsiteCitate
+                populateReferences={populateReferences}
+                setshowSuccess={setshowSuccess}
+              />
             ) : (
-              <BookCitate populateReferences={populateReferences} />
+              <BookCitate
+                populateReferences={populateReferences}
+                setshowSuccess={setshowSuccess}
+              />
             )}
           </div>
 

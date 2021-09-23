@@ -9,9 +9,21 @@ const Div = styled.div`
       margin-bottom: 1rem;
     }
   }
+
+  .citate {
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-end;
+
+    .btn {
+      margin-top: 0px !important;
+      margin-bottom: 10px;
+      margin-left: 1.5rem;
+    }
+  }
 `;
 
-let BookCitate = ({ populateReferences }) => {
+let BookCitate = ({ populateReferences, setshowSuccess }) => {
   const [author, setauthor] = useState([]);
   const [year, setyear] = useState("");
   const [title, settitle] = useState("");
@@ -155,6 +167,10 @@ let BookCitate = ({ populateReferences }) => {
       }
 
       populateReferences();
+      setshowSuccess(true);
+      setTimeout(() => {
+        setshowSuccess(false);
+      }, 1000);
     }
   };
 
@@ -182,11 +198,16 @@ let BookCitate = ({ populateReferences }) => {
 
       <label htmlFor="">
         Book Title, Author
-        <input
-          type="text"
-          value={bookSearchString}
-          onChange={(e) => setbookSearchString(e.target.value)}
-        />
+        <div className="citate">
+          <input
+            type="text"
+            value={bookSearchString}
+            onChange={(e) => setbookSearchString(e.target.value)}
+          />
+          <div className="cite btn" onClick={() => getBooks()}>
+            <span>{loading ? "Loading" : "Cite"}</span>
+          </div>
+        </div>
       </label>
       {booksVisible && (
         <div className="books">
@@ -294,9 +315,6 @@ let BookCitate = ({ populateReferences }) => {
         {publisher ? `${publisher}.` : ""}
       </p>
 
-      <div className="cite btn" onClick={() => getBooks()}>
-        <span>{loading ? "Loading" : "Cite"}</span>
-      </div>
       <div className="add-citation btn" onClick={() => addReference()}>
         <span>Add to references</span>
       </div>
