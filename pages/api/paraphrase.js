@@ -25,7 +25,7 @@ export default function handler(req, res) {
             .then(response => response.json())
             .then(result => {
                 let textResult = result.data;
-                res.send({text: textResult})
+                res.send({text: textResult, data: text})
             })
             .catch(error => console.log('error', error));
 

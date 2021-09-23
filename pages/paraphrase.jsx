@@ -164,6 +164,7 @@ let Paraphrase = () => {
         .then((response) => response.json())
         .then((result) => {
           setresultText(result.text[0]);
+          console.log(result);
           setloading(false);
         })
         .catch((error) => console.log("error", error));
