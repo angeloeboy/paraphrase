@@ -144,28 +144,30 @@ let Paraphrase = () => {
   };
 
   let sendText = () => {
-    setloading(true);
-    var myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
+    if (charCount < 450) {
+      setloading(true);
+      var myHeaders = new Headers();
+      myHeaders.append("Content-Type", "application/json");
 
-    var raw = JSON.stringify({
-      text: origText,
-    });
+      var raw = JSON.stringify({
+        text: origText,
+      });
 
-    var requestOptions = {
-      method: "POST",
-      headers: myHeaders,
-      body: raw,
-      redirect: "follow",
-    };
+      var requestOptions = {
+        method: "POST",
+        headers: myHeaders,
+        body: raw,
+        redirect: "follow",
+      };
 
-    fetch("/api/paraphrase", requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
-        setresultText(result.text[0]);
-        setloading(false);
-      })
-      .catch((error) => console.log("error", error));
+      fetch("/api/paraphrase", requestOptions)
+        .then((response) => response.json())
+        .then((result) => {
+          setresultText(result.text[0]);
+          setloading(false);
+        })
+        .catch((error) => console.log("error", error));
+    }
   };
 
   let clearText = () => {
@@ -203,7 +205,13 @@ let Paraphrase = () => {
         </div>
         <div className="extras">
           <p className="num-of-words">
-            <span className="number">{charCount}</span> /500 characters
+            <span
+              className="number"
+              style={{ color: charCount < 450 ? "green" : "red" }}
+            >
+              {charCount}
+            </span>{" "}
+            /450 characters
           </p>
           <div className="paraphrase-btn btn" onClick={() => sendText()}>
             <svg
