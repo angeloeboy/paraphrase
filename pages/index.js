@@ -16,7 +16,8 @@ export default function Home() {
          
       <h1>Hello {name}</h1>
       <p><Link href="/citate">Citate</Link></p>
-      <Link href="/paraphrase">Paraphrase</Link>
+      <p><Link href="/paraphrase">Paraphrase</Link></p>
+      <p><Link href="/grammar-check">Grammar Checking</Link></p>
 
     </div>
   )

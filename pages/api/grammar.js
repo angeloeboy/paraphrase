@@ -27,5 +27,7 @@ export default function handler(req, res) {
             })
           .catch(error => console.log('error', error));
 
+    }else{
+      res.send("Add text to request")
     }
 }

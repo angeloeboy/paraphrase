@@ -137,6 +137,50 @@ let GrammarCheck = () => {
   const [charCount, setcharCount] = useState(0);
   const [resultText, setresultText] = useState("");
   const [loading, setloading] = useState(false);
+  const [result, setresult] = useState([]);
+  const [corrected, setcorrected] = useState(false);
+
+  let sendText = () => {
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    var raw = JSON.stringify({
+      text: origText,
+    });
+
+    var requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow",
+    };
+
+    fetch("/api/grammar-check", requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        console.log(result);
+        // setresult(result.grammarResult);
+        // setcorrected(true);
+        // setresultText(origText);
+      })
+      .catch((error) => console.log("error", error));
+  };
+
+  let correctedText = (offset, length) => {
+    let originalText = origText;
+    let text = "";
+
+    for (let x = 0; x < length; x++) {
+      text = text + originalText.charAt(offset + x);
+    }
+
+    return text;
+  };
+
+  let handleReplacementClick = (text, correctedText) => {
+    let texts = resultText.replace(correctedText, text);
+    setresultText(texts);
+  };
 
   return (
     <Div>
@@ -145,31 +189,67 @@ let GrammarCheck = () => {
         <div className="text-inputs">
           <div className="text-original text-container">
             <p className="text-instruction">
-              Enter the text you want to paraphrase
+              Enter the text you want to be corrected
             </p>
-            <textarea
-              name=""
-              id=""
-              placeholder="Enter the text you want to paraphrase. You can select any of the modes above for different levels of paraphrasing. After writing or pasting your text, use the Paraphrase button below."
-              value={origText}
-              onChange={(e) => handleOrigTextChange(e)}
-            ></textarea>
+            {!corrected ? (
+              <textarea
+                name=""
+                id=""
+                placeholder="Enter the text you want to paraphrase. You can select any of the modes above for different levels of paraphrasing. After writing or pasting your text, use the Paraphrase button below."
+                value={origText}
+                onChange={(e) => setorigText(e.target.value)}
+              ></textarea>
+            ) : (
+              <>
+                <textarea
+                  name=""
+                  id=""
+                  placeholder="Enter the text you want to paraphrase. You can select any of the modes above for different levels of paraphrasing. After writing or pasting your text, use the Paraphrase button below."
+                  value={resultText}
+                  onChange={(e) => setresultText(e.target.value)}
+                ></textarea>
+                <p>result</p>
+              </>
+            )}
           </div>
 
           <div className="text-result text-container">
-            <p className="text-instruction">Paraphrased text</p>
-            <textarea
-              name=""
-              placeholder="You will get the resulting text here after the paraphrasing tool has finished rephrasing."
-              readOnly
-              value={resultText}
-            ></textarea>
+            <p className="text-instruction">Result</p>
+            {result.map((res, index) => {
+              return (
+                <div key={index}>
+                  <p>
+                    {index + 1}. {res.message}
+                  </p>
+                  <p>{correctedText(res.offset, res.length)}</p>
+
+                  <p>Possible replacements</p>
+
+                  {res.replacements.map((replacement, index) => {
+                    return (
+                      <div key={index}>
+                        <p
+                          onClick={() =>
+                            handleReplacementClick(
+                              replacement.value,
+                              correctedText(res.offset, res.length)
+                            )
+                          }
+                        >
+                          {replacement.value}
+                        </p>
+                      </div>
+                    );
+                  })}
+                </div>
+              );
+            })}
           </div>
         </div>
         <div className="extras">
-          <p className="num-of-words">
+          {/* <p className="num-of-words">
             <span className="number">{charCount}</span> /500 characters
-          </p>
+          </p> */}
           <div className="paraphrase-btn btn" onClick={() => sendText()}>
             <svg
               className="w-6 h-6 mr-2 -ml-1"
@@ -186,40 +266,6 @@ let GrammarCheck = () => {
               ></path>
             </svg>
             <span>{loading ? "Loading.." : "Paraphrase"}</span>
-          </div>
-
-          <div className="copy-clear" onClick={() => clearText()}>
-            <div className="clear-btn btn">
-              <svg
-                className="w-6 h-6 mr-2 -ml-1"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <title>Clear all</title>
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                ></path>
-              </svg>
-
-              <p>Clear all</p>
-            </div>
-            <div className="copy-btn btn">
-              <svg
-                className="w-6 h-6 mr-2 -ml-1"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-              >
-                <title>Copy result</title>
-                <path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z"></path>
-                <path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z"></path>
-              </svg>
-              <p> Copy result</p>
-            </div>
           </div>
         </div>
       </div>
