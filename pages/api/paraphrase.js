@@ -4,14 +4,14 @@ export default function handler(req, res) {
 
     if(req.method === "POST") {
         const text = req.body.text; 
-        // const mode = req.body.mode;
+        const mode = req.body.mode;
 
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
 
         var raw = JSON.stringify({
           "text": text,
-          "mode": "creative"
+          "mode": mode
         });
 
         var requestOptions = {

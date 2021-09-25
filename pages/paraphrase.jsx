@@ -45,7 +45,19 @@ const Div = styled.div`
   }
 
   .paraphrasing-tool {
-    // display: none;
+    .buttons {
+      display: flex;
+      justify-content: center;
+
+      button {
+        margin: 1rem;
+        padding: 1rem;
+        width: 200px;
+        border: none;
+        cursor: pointer;
+        transition: all 0.1s ease-in-out;
+      }
+    }
     .text-inputs {
       display: flex;
       width: 90%;
@@ -137,6 +149,7 @@ let Paraphrase = () => {
   const [charCount, setcharCount] = useState(0);
   const [resultText, setresultText] = useState("");
   const [loading, setloading] = useState(false);
+  const [paraphraseMode, setparaphraseMode] = useState("standard");
 
   let handleOrigTextChange = (e) => {
     setorigText(e.target.value);
@@ -151,6 +164,7 @@ let Paraphrase = () => {
 
       var raw = JSON.stringify({
         text: origText,
+        mode: paraphraseMode,
       });
 
       var requestOptions = {
@@ -176,10 +190,46 @@ let Paraphrase = () => {
     setresultText("");
   };
 
+  let setMode = (text) => {
+    setparaphraseMode(text);
+  };
+
   return (
     <Div>
       <div className="paraphrasing-tool tool">
         <h1 className="title"> Paraphrasing Tool</h1>
+        <div className="buttons">
+          <button
+            onClick={() => setMode("standard")}
+            style={
+              paraphraseMode == "standard"
+                ? { backgroundColor: "#c3dfb2" }
+                : { backgroundColor: "#f4fdee" }
+            }
+          >
+            Standard Mode
+          </button>
+          <button
+            onClick={() => setMode("fluent")}
+            style={
+              paraphraseMode == "fluent"
+                ? { backgroundColor: "#c3dfb2" }
+                : { backgroundColor: "#f4fdee" }
+            }
+          >
+            Fluent Mode
+          </button>
+          <button
+            onClick={() => setMode("creative")}
+            style={
+              paraphraseMode == "creative"
+                ? { backgroundColor: "#c3dfb2" }
+                : { backgroundColor: "#f4fdee" }
+            }
+          >
+            Creative Mode
+          </button>
+        </div>
         <div className="text-inputs">
           <div className="text-original text-container">
             <p className="text-instruction">
