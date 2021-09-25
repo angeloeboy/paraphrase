@@ -33,6 +33,8 @@ const Div = styled.div`
       border-radius: 0.375rem;
       cursor: pointer;
       transition: all 0.3s ease;
+      text-align: center;
+      margin: 0 auto;
 
       &:hover {
         opacity: 1;
@@ -44,10 +46,9 @@ const Div = styled.div`
     }
   }
 
-  .paraphrasing-tool {
-    // display: none;
+  .grammar-tool {
     .text-inputs {
-      display: flex;
+      /* display: flex; */
       width: 90%;
       margin: 16px auto;
       .text-container {
@@ -77,7 +78,6 @@ const Div = styled.div`
           &:focus {
             outline: none;
             border: 2px solid #a9d191;
-            //   outline: 2px #474ed9 solid;
           }
         }
 
@@ -85,62 +85,44 @@ const Div = styled.div`
           color: #c2c6d2;
         }
       }
-    }
 
-    .extras {
-      width: 90%;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      justify-content: space-between;
-      align-items: center;
-
-      .num-of-words {
-        span {
-          color: green;
-        }
+      .text-result {
+        border: 2px solid rgba(226, 232, 240, 1);
+        padding: 1rem;
+        border-radius: 0.5rem;
       }
     }
 
-    .copy-clear {
-      text-align: right;
-      div {
-        display: inline-flex;
-        padding: 0.5rem 1rem;
-        width: initial;
-        font-size: 1rem;
-        svg {
-          margin-right: 0.25rem;
-        }
-      }
-
-      .clear-btn {
-        background-color: rgba(255, 0, 0, 0.164);
-        color: red;
-      }
-
-      .copy-btn {
-        color: #64748b;
-        background-color: #64748b21;
-      }
+    .errors {
+      margin-bottom: 40px;
     }
+  }
+`;
 
-    .paraphrase-btn {
-      display: flex;
-      margin: 0 auto;
-    }
+const Replacement = styled.p`
+  background-color: #01a301;
+  padding: 0.5rem 1rem;
+  color: white;
+  border-radius: 3px;
+  display: inline-block;
+  margin-top: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease-in;
+  margin-right: 1rem;
+  &:hover {
+    background-color: #06d606;
   }
 `;
 
 let GrammarCheck = () => {
   const [origText, setorigText] = useState("");
-  const [charCount, setcharCount] = useState(0);
   const [resultText, setresultText] = useState("");
   const [loading, setloading] = useState(false);
   const [result, setresult] = useState([]);
   const [corrected, setcorrected] = useState(false);
 
   let sendText = () => {
+    setloading(true);
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
 
@@ -160,8 +142,8 @@ let GrammarCheck = () => {
       .then((result) => {
         console.log(result.grammarResult);
         setresult(result.grammarResult);
-        setcorrected(true);
         setresultText(origText);
+        setloading(false);
       })
       .catch((error) => console.log("error", error));
   };
@@ -171,22 +153,27 @@ let GrammarCheck = () => {
     let text = "";
 
     for (let x = 0; x < length; x++) {
-      text = text + originalText.charAt(offset + x);
+      text = text + resultText.charAt(offset + x);
     }
 
     return text;
   };
 
-  let handleReplacementClick = (text, correctedText) => {
+  let handleReplacementClick = (text, correctedText, index) => {
     let texts = resultText.replace(correctedText, text);
-    setresultText(text);
+    setorigText(texts);
+
+    let resultARr = result;
+    resultARr.splice(index, 1);
+    setresult(resultARr);
   };
 
   return (
     <Div>
-      <div className="paraphrasing-tool tool">
+      <div className="grammar-tool tool">
         <h1 className="title"> Grammar Checking Tool</h1>
         <div className="text-inputs">
+          {/* Original Text Container */}
           <div className="text-original text-container">
             <p className="text-instruction">
               Enter the text you want to be corrected
@@ -208,37 +195,37 @@ let GrammarCheck = () => {
                   value={resultText}
                   onChange={(e) => setresultText(e.target.value)}
                 ></textarea>
-                <p>result</p>
               </>
             )}
           </div>
 
+          {/* Error Result Container */}
           <div className="text-result text-container">
-            <p className="text-instruction">Result</p>
+            <p className="text-instruction">Errors ({result.length})</p>
             {result.map((res, index) => {
               return (
-                <div key={index}>
+                <div key={index} className="errors">
                   <p>
-                    {index + 1}. {res.message}
+                    {index + 1}. {correctedText(res.offset, res.length)} -
+                    {res.message}
                   </p>
-                  <p>{correctedText(res.offset, res.length)}</p>
+                  <p></p>
 
                   <p>Possible replacements</p>
 
                   {res.replacements.map((replacement, index) => {
                     return (
-                      <div key={index}>
-                        <p
-                          onClick={() =>
-                            handleReplacementClick(
-                              replacement.value,
-                              correctedText(res.offset, res.length)
-                            )
-                          }
-                        >
-                          {replacement.value}
-                        </p>
-                      </div>
+                      <Replacement
+                        key={index}
+                        onClick={() =>
+                          handleReplacementClick(
+                            replacement.value,
+                            correctedText(res.offset, res.length, index)
+                          )
+                        }
+                      >
+                        {replacement.value}
+                      </Replacement>
                     );
                   })}
                 </div>
@@ -246,27 +233,8 @@ let GrammarCheck = () => {
             })}
           </div>
         </div>
-        <div className="extras">
-          {/* <p className="num-of-words">
-            <span className="number">{charCount}</span> /500 characters
-          </p> */}
-          <div className="paraphrase-btn btn" onClick={() => sendText()}>
-            <svg
-              className="w-6 h-6 mr-2 -ml-1"
-              fill="none"
-              stroke="white"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"
-              ></path>
-            </svg>
-            <span>{loading ? "Loading.." : "Paraphrase"}</span>
-          </div>
+        <div className="fix-btn btn" onClick={() => sendText()}>
+          <span>{loading ? "Loading.." : "Fix"}</span>
         </div>
       </div>
     </Div>
