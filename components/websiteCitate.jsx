@@ -34,6 +34,61 @@ let WebsiteCitate = ({ populateReferences }) => {
     populateReferences();
   }, []);
 
+  let getMonth = (n) => {
+    let month;
+
+    switch (n) {
+      case "01":
+        month = "January";
+        break;
+      case "02":
+        month = "February";
+        break;
+
+      case "03":
+        month = "March";
+        break;
+
+      case "04":
+        month = "April";
+        break;
+
+      case "05":
+        month = "May";
+        break;
+
+      case "06":
+        month = "June";
+        break;
+
+      case "07":
+        month = "July";
+        break;
+
+      case "08":
+        month = "August";
+        break;
+
+      case "09":
+        month = "September";
+        break;
+
+      case "10":
+        month = "October";
+        break;
+
+      case "11":
+        month = "November";
+        break;
+
+      case "12":
+        month = "December";
+        break;
+    }
+
+    return month;
+  };
+
   let addAuthor = () => {
     let added = {
       initials: addedAuthorInitial,
@@ -245,7 +300,12 @@ let WebsiteCitate = ({ populateReferences }) => {
           </label>
           <label>
             Month
-            <input type="text" name="" id="" value={dateAccessed[1]} />
+            <input
+              type="text"
+              name=""
+              id=""
+              value={getMonth(dateAccessed[1])}
+            />
           </label>
           <label>
             Day
@@ -256,7 +316,7 @@ let WebsiteCitate = ({ populateReferences }) => {
           <p className="text-result">
             {authorList} {yearPublished ? `(${yearPublished})` : ""} {pageTitle}
             [Online]. Available at: {websiteLink} (Accessed: {dateAccessed[2]}{" "}
-            {dateAccessed[1]} {dateAccessed[0]})
+            {getMonth(dateAccessed[1])} {dateAccessed[0]})
           </p>
         )}
       </div>
