@@ -132,13 +132,15 @@ const Div = styled.div`
   }
 `;
 
-let GrammarCheck = () => {
+let GrammarCheckV2 = () => {
   const [origText, setorigText] = useState("");
   const [charCount, setcharCount] = useState(0);
   const [resultText, setresultText] = useState("");
   const [loading, setloading] = useState(false);
   const [result, setresult] = useState([]);
   const [corrected, setcorrected] = useState(false);
+  const [corrections, setcorrections] = useState([]);
+  const [correctedTexts, setcorrectedTexts] = useState("fdfd");
 
   let sendText = () => {
     var myHeaders = new Headers();
@@ -155,13 +157,11 @@ let GrammarCheck = () => {
       redirect: "follow",
     };
 
-    fetch("/api/grammar", requestOptions)
+    fetch("/api/grammar-check", requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        console.log(result.grammarResult);
-        setresult(result.grammarResult);
-        setcorrected(true);
-        setresultText(origText);
+        console.log(result.data.contentToReplace);
+        setcorrections(result.data.contentToReplace);
       })
       .catch((error) => console.log("error", error));
   };
@@ -179,7 +179,18 @@ let GrammarCheck = () => {
 
   let handleReplacementClick = (text, correctedText) => {
     let texts = resultText.replace(correctedText, text);
-    setresultText(text);
+    setresultText(texts);
+  };
+
+  let fixText = () => {
+    let text = origText;
+
+    corrections.map((correction) => {
+      text = text.replace(correction.originalWord, correction.replacementWord);
+    });
+
+    setcorrectedTexts(text);
+    console.log(text);
   };
 
   return (
@@ -244,12 +255,10 @@ let GrammarCheck = () => {
                 </div>
               );
             })}
+            {correctedTexts}
           </div>
         </div>
         <div className="extras">
-          {/* <p className="num-of-words">
-            <span className="number">{charCount}</span> /500 characters
-          </p> */}
           <div className="paraphrase-btn btn" onClick={() => sendText()}>
             <svg
               className="w-6 h-6 mr-2 -ml-1"
@@ -267,10 +276,28 @@ let GrammarCheck = () => {
             </svg>
             <span>{loading ? "Loading.." : "Paraphrase"}</span>
           </div>
+
+          <div className="paraphrase-btn btn" onClick={() => fixText()}>
+            {/* <svg
+              className="w-6 h-6 mr-2 -ml-1"
+              fill="none"
+              stroke="white"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"
+              ></path>
+            </svg> */}
+            <span>Fix</span>
+          </div>
         </div>
       </div>
     </Div>
   );
 };
 
-export default GrammarCheck;
+export default GrammarCheckV2;
