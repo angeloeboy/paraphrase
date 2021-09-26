@@ -11,6 +11,9 @@ let WebsiteCitate = ({ populateReferences }) => {
   const [authorList, setauthorList] = useState("");
   const [addedAuthorInitial, setaddedAuthorInitial] = useState("");
   const [addedAuthorName, setaddedAuthorName] = useState("");
+  const [dayAccessed, setdayAccessed] = useState("");
+  const [monthAccessed, setmonthAccessed] = useState("");
+  const [yearAccessed, setyearAccessed] = useState("");
 
   useEffect(() => {
     let text = "";
@@ -127,12 +130,16 @@ let WebsiteCitate = ({ populateReferences }) => {
 
         if (infos !== undefined) {
           if (infos.attributes.author[0] !== undefined) {
-            console.log("true");
-            console.log(infos.attributes.author[0]);
-            setauthor(infos.attributes.author);
+            console.log(infos.attributes.author);
+
+            let authors = infos.attributes.author.filter((auth) =>
+              auth.type == "organization" ? false : true
+            );
+
+            console.log(authors);
+            setauthor(authors);
           } else {
             console.log("False");
-            setauthor([]);
           }
 
           setyearPublished(
@@ -141,9 +148,14 @@ let WebsiteCitate = ({ populateReferences }) => {
               : ""
           );
 
+          let date = infos.attributes.accessed[0];
+          console.log(date);
+          setyearAccessed(date[0]);
+          setmonthAccessed(getMonth(date[1]));
+          setdayAccessed(date[2]);
+
           setdateAccessed(infos.attributes.accessed[0]);
           setpageTitle(infos.attributes.title);
-
           setreferenceVisible(true);
         }
 
@@ -202,6 +214,7 @@ let WebsiteCitate = ({ populateReferences }) => {
       populateReferences();
     }
   };
+
   return (
     <div className="web-citation">
       <h1 className="citation-title">Website Citation</h1>
@@ -296,7 +309,13 @@ let WebsiteCitate = ({ populateReferences }) => {
         <div className="date-accessed">
           <label>
             Year
-            <input type="text" name="" id="" value={dateAccessed[0]} />
+            <input
+              type="text"
+              name=""
+              id=""
+              value={yearAccessed}
+              onChange={(e) => setyearAccessed(e.target.value)}
+            />
           </label>
           <label>
             Month
@@ -304,19 +323,27 @@ let WebsiteCitate = ({ populateReferences }) => {
               type="text"
               name=""
               id=""
-              value={getMonth(dateAccessed[1])}
+              value={monthAccessed}
+              onChange={(e) => monthAccessed(e.target.value)}
             />
           </label>
+
           <label>
             Day
-            <input type="text" name="" id="" value={dateAccessed[2]} />
+            <input
+              type="text"
+              name=""
+              id=""
+              value={dayAccessed}
+              onChange={(e) => setdayAccessed(e.target.value)}
+            />
           </label>
         </div>
         {referenceVisible && (
           <p className="text-result">
             {authorList} {yearPublished ? `(${yearPublished})` : ""} {pageTitle}
-            [Online]. Available at: {websiteLink} (Accessed: {dateAccessed[2]}{" "}
-            {getMonth(dateAccessed[1])} {dateAccessed[0]})
+            [Online]. Available at: {websiteLink} (Accessed: {dayAccessed}{" "}
+            {monthAccessed} {yearAccessed}
           </p>
         )}
       </div>
