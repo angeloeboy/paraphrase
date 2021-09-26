@@ -72,7 +72,7 @@ const Div = styled.div`
           border-width: 2px;
           border-radius: 0.5rem;
           height: 24rem;
-          border-color: rgba(226, 232, 240, 1);
+          border: 1px solid rgba(226, 232, 240, 1);
           resize: none;
           line-height: 1.75rem;
 
@@ -98,6 +98,38 @@ const Div = styled.div`
       margin-bottom: 40px;
     }
   }
+
+  .copy-clear {
+    text-align: center;
+    .btn {
+      display: inline-flex;
+      padding: 0.5rem 1rem;
+      font-size: 1rem;
+      margin: 1rem;
+      width: initial;
+      svg {
+        margin-right: 0.25rem;
+      }
+    }
+
+    .clear-btn {
+      background-color: rgba(255, 0, 0, 0.164);
+      color: red;
+    }
+
+    .copy-btn {
+      color: #64748b;
+      background-color: #64748b21;
+    }
+
+    @media (max-width: 650px) {
+      text-align: center;
+
+      .btn {
+        margin: 1rem;
+      }
+    }
+  }
 `;
 
 const Replacement = styled.p`
@@ -121,6 +153,7 @@ let GrammarCheck = () => {
   const [loading, setloading] = useState(false);
   const [result, setresult] = useState([]);
   const [corrected, setcorrected] = useState(false);
+  const [copied, setcopied] = useState(false);
 
   let sendText = () => {
     setloading(true);
@@ -147,6 +180,20 @@ let GrammarCheck = () => {
         setloading(false);
       })
       .catch((error) => console.log("error", error));
+  };
+
+  let clearText = () => {
+    setorigText("");
+    setresult([]);
+  };
+
+  let copyResult = () => {
+    setcopied(true);
+
+    setTimeout(() => {
+      setcopied(false);
+    }, 500);
+    navigator.clipboard.writeText(resultText);
   };
 
   let correctedText = (offset, length) => {
@@ -237,6 +284,40 @@ let GrammarCheck = () => {
         </div>
         <div className="fix-btn btn" onClick={() => sendText()}>
           <span>{loading ? "Loading.." : "Fix"}</span>
+        </div>
+
+        <div className="copy-clear">
+          <div className="clear-btn btn" onClick={() => clearText()}>
+            <svg
+              className="w-6 h-6 mr-2 -ml-1"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <title>Clear all</title>
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+              ></path>
+            </svg>
+
+            <p>Clear all</p>
+          </div>
+          <div className="copy-btn btn" onClick={() => copyResult()}>
+            <svg
+              className="w-6 h-6 mr-2 -ml-1"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+            >
+              <title>Copy result</title>
+              <path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z"></path>
+              <path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z"></path>
+            </svg>
+            <p> {copied ? "Copied!" : "Copy Result"}</p>
+          </div>
         </div>
       </div>
     </Div>

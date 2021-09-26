@@ -24,7 +24,7 @@ let Navigation = styled.nav`
   }
 
   .img-container {
-    width: 50px;
+    width: 100px;
   }
 
   @media (max-width: 550px) {

@@ -149,11 +149,8 @@ let Div = styled.div`
             cursor: pointer;
             border-radius: 0.5rem;
             width: 100%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
 
-            @media (max-width: 600px) {
+            /* @media (max-width: 600px) {
               flex-flow: column;
 
               button {
@@ -161,20 +158,31 @@ let Div = styled.div`
                 padding: 0.8rem;
                 font-size: 14px;
               }
+            } */
+
+            .reference-buttons {
+              margin-top: 1rem;
+
+              button {
+                padding: 10px;
+                font-size: 1rem;
+                cursor: pointer;
+                color: black;
+                color: white;
+                width: 100px;
+                margin-right: 1rem;
+                border: none;
+              }
+
+              .delete {
+                background-color: red;
+              }
+
+              .copy {
+                background-color: #63744d;
+              }
             }
           }
-        }
-
-        button {
-          padding: 1rem 2rem;
-          /* min-width: 200px; */
-          font-size: 1rem;
-          margin: 0px 1rem;
-          border: 1px solid #63744d;
-          cursor: pointer;
-          color: black;
-          background-color: #63744d;
-          color: white;
         }
       }
 

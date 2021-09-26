@@ -83,7 +83,7 @@ const Div = styled.div`
           border-width: 2px;
           border-radius: 0.5rem;
           height: 24rem;
-          border-color: rgba(226, 232, 240, 1);
+          border: 1px solid rgba(226, 232, 240, 1);
           resize: none;
           line-height: 1.75rem;
 
@@ -136,6 +136,7 @@ const Div = styled.div`
         padding: 0.5rem 1rem;
         width: initial;
         font-size: 1rem;
+        margin-left: 1rem;
         svg {
           margin-right: 0.25rem;
         }
@@ -173,10 +174,20 @@ let Paraphrase = () => {
   const [resultText, setresultText] = useState("");
   const [loading, setloading] = useState(false);
   const [paraphraseMode, setparaphraseMode] = useState("standard");
+  const [copied, setcopied] = useState(false);
 
   let handleOrigTextChange = (e) => {
     setorigText(e.target.value);
     setcharCount(e.target.value.length);
+  };
+
+  let copyResult = () => {
+    setcopied(true);
+
+    setTimeout(() => {
+      setcopied(false);
+    }, 500);
+    navigator.clipboard.writeText(resultText);
   };
 
   let sendText = () => {
@@ -200,8 +211,17 @@ let Paraphrase = () => {
       fetch("/api/paraphrase", requestOptions)
         .then((response) => response.json())
         .then((result) => {
-          setresultText(result.text[0]);
-          console.log(result);
+          let text = "";
+
+          result.text.map((txt, index) => {
+            if (index > 0) {
+              text = text + " " + txt;
+            } else {
+              text = text + txt;
+            }
+          });
+          setresultText(text);
+          console.log(text);
           setloading(false);
         })
         .catch((error) => console.log("error", error));
@@ -306,8 +326,8 @@ let Paraphrase = () => {
             <span>{loading ? "Loading.." : "Paraphrase"}</span>
           </div>
 
-          <div className="copy-clear" onClick={() => clearText()}>
-            <div className="clear-btn btn">
+          <div className="copy-clear">
+            <div className="clear-btn btn" onClick={() => clearText()}>
               <svg
                 className="w-6 h-6 mr-2 -ml-1"
                 fill="none"
@@ -326,17 +346,18 @@ let Paraphrase = () => {
 
               <p>Clear all</p>
             </div>
-            <div className="copy-btn btn">
+
+            <div className="copy-btn btn" onClick={() => copyResult()}>
               <svg
                 className="w-6 h-6 mr-2 -ml-1"
                 fill="currentColor"
                 viewBox="0 0 20 20"
               >
-                <title>Copy result</title>
+                <title></title>
                 <path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z"></path>
                 <path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z"></path>
               </svg>
-              <p> Copy result</p>
+              <p> {copied ? "Copied!" : "Copy Result"}</p>
             </div>
           </div>
         </div>

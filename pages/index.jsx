@@ -58,16 +58,7 @@ export default function Home() {
       <Nav />
 
       <div className="texts">
-        <h1>
-          For all writing tasks at hand, use our completely free paraphrasing
-          tool
-        </h1>
-
-        <p className="subtitle">
-          When trying to avoid plagiarism while writing articles, essays, or
-          even emails, using our Paraphrasing tool will help you rewrite the
-          sentences that are identical in meaning to the original text.
-        </p>
+        <h1>For the Dropkicks</h1>
       </div>
 
       <div className="features">

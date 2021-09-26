@@ -1,6 +1,9 @@
+import { useState } from "react";
 import styled from "styled-components";
 
 let References = (props) => {
+  const [copied, setcopied] = useState(false);
+
   let deleteReference = (e) => {
     let index = e.currentTarget.dataset.index;
     let referencesArr = props.references;
@@ -18,9 +21,30 @@ let References = (props) => {
             <div key={index}>
               <div className="reference-item">
                 <p>{reference}</p>
-                <button onClick={(e) => deleteReference(e)} data-index={index}>
-                  Delete
-                </button>
+                <div className="reference-buttons">
+                  <button
+                    className="delete"
+                    onClick={(e) => deleteReference(e)}
+                    data-index={index}
+                  >
+                    Delete
+                  </button>
+
+                  <button
+                    className="copy"
+                    onClick={(e) => {
+                      navigator.clipboard.writeText(reference);
+                      setcopied(true);
+
+                      setTimeout(() => {
+                        setcopied(false);
+                      }, 500);
+                    }}
+                    data-index={index}
+                  >
+                    Copy
+                  </button>
+                </div>
               </div>
             </div>
           );
