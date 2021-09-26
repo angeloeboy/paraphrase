@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { useState } from "react";
+import Nav from "../components/nav";
 
 const Div = styled.div`
   * {
@@ -97,6 +98,10 @@ const Div = styled.div`
           color: #c2c6d2;
         }
       }
+
+      @media (max-width: 950px) {
+        flex-flow: column;
+      }
     }
 
     .extras {
@@ -110,6 +115,16 @@ const Div = styled.div`
       .num-of-words {
         span {
           color: green;
+        }
+      }
+
+      @media (max-width: 650px) {
+        display: flex;
+        align-items: center;
+        flex-flow: column;
+
+        div {
+          margin-top: 1rem;
         }
       }
     }
@@ -134,6 +149,14 @@ const Div = styled.div`
       .copy-btn {
         color: #64748b;
         background-color: #64748b21;
+      }
+
+      @media (max-width: 650px) {
+        text-align: center;
+
+        .btn {
+          margin: 1rem;
+        }
       }
     }
 
@@ -196,6 +219,7 @@ let Paraphrase = () => {
 
   return (
     <Div>
+      <Nav />
       <div className="paraphrasing-tool tool">
         <h1 className="title"> Paraphrasing Tool</h1>
         <div className="buttons">

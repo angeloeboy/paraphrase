@@ -1,5 +1,6 @@
 import { useState } from "react";
 import styled from "styled-components";
+import Nav from "../components/nav";
 
 const Div = styled.div`
   * {
@@ -170,6 +171,7 @@ let GrammarCheck = () => {
 
   return (
     <Div>
+      <Nav />
       <div className="grammar-tool tool">
         <h1 className="title"> Grammar Checking Tool</h1>
         <div className="text-inputs">

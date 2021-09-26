@@ -4,6 +4,7 @@ import References from "./../components/references";
 import WebsiteCitate from "../components/websiteCitate";
 import BookCitate from "../components/bookCitate";
 import { motion } from "framer-motion";
+import Nav from "../components/nav";
 
 let Div = styled.div`
   .citation-tool {
@@ -223,6 +224,7 @@ let Citate = () => {
 
   return (
     <Div>
+      <Nav />
       <div className="citation-tool tool">
         <h1 className="title"> Citation Tool</h1>
 
