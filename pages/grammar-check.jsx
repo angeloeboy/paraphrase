@@ -34,24 +34,19 @@ const Div = styled.div`
 
     .btn {
       padding: 0.75rem 2.5rem;
-      background-color: #a9d191;
-      opacity: 0.7;
       font-size: 1.125rem;
       line-height: 1.75rem;
       font-weight: 500;
       color: white;
       justify-content: space-between;
-      width: 200px;
+      width: 300px;
       border-radius: 0.375rem;
       cursor: pointer;
       transition: all 0.3s ease;
       text-align: center;
       margin: 0 auto;
-
-      &:hover {
-        opacity: 1;
-      }
-
+      background-color: #62744c;
+      opacity: 1 !important;
       svg {
         width: 1.5rem;
       }
@@ -248,12 +243,12 @@ let GrammarCheck = () => {
     return text;
   };
 
-  let handleReplacementClick = (text, correctedText, index) => {
+  let handleReplacementClick = (text, correctedText, indx) => {
     let texts = resultText.replace(correctedText, text);
     setorigText(texts);
 
     let resultARr = result;
-    resultARr.splice(index, 1);
+    resultARr.splice(indx, 1);
     setresult(resultARr);
   };
 
@@ -313,6 +308,8 @@ let GrammarCheck = () => {
           <div className="text-result text-container">
             <p className="text-instruction">Errors ({result.length})</p>
             {result.map((res, index) => {
+              let indx = index;
+
               return (
                 <div key={index} className="errors">
                   <p>
@@ -323,14 +320,15 @@ let GrammarCheck = () => {
 
                   <p>Possible replacements</p>
 
-                  {res.replacements.map((replacement, index) => {
+                  {res.replacements.map((replacement) => {
                     return (
                       <Replacement
                         key={index}
                         onClick={() =>
                           handleReplacementClick(
                             replacement.value,
-                            correctedText(res.offset, res.length, index)
+                            correctedText(res.offset, res.length),
+                            indx
                           )
                         }
                       >
@@ -357,7 +355,7 @@ let GrammarCheck = () => {
             </div>
           ) : (
             <>
-              <span>Paraphrase </span>
+              <span>Check Grammar </span>
             </>
           )}
         </div>

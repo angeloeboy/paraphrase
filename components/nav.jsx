@@ -13,11 +13,13 @@ let Navigation = styled.nav`
   margin: 0 auto;
 
   .links {
-    margin-top: 1rem;
+    margin-top: 3rem;
     display: flex;
     justify-content: space-around;
     width: 100%;
-    background-color: #333333;
+    background-color: #9edd77;
+    border: 4px solid #5ace11;
+
     a {
       color: black;
       text-decoration: none;
@@ -28,7 +30,9 @@ let Navigation = styled.nav`
       border-bottom: 1px solid green;
       border-color: transparent;
       margin: 1rem;
-      color: #b9b9b9;
+      color: #e1ffce;
+      font-size: 1.5rem;
+      font-weight: bold;
       &:hover {
         color: white;
       }
