@@ -36,6 +36,7 @@ let BookCitate = ({ populateReferences, setshowSuccess }) => {
   const [authorList, setauthorList] = useState("");
   const [addedAuthorInitial, setaddedAuthorInitial] = useState("");
   const [addedAuthorName, setaddedAuthorName] = useState("");
+  const [referenceVisible, setreferenceVisible] = useState(false);
 
   useEffect(() => {
     let text = "";
@@ -95,6 +96,7 @@ let BookCitate = ({ populateReferences, setshowSuccess }) => {
         console.log(booksArrFixed);
         setbooks(booksArrFixed);
         setbooksVisible(true);
+        setreferenceVisible(true);
       })
       .catch((error) => console.log("error", error));
   };
@@ -308,12 +310,14 @@ let BookCitate = ({ populateReferences, setshowSuccess }) => {
         />
       </label>
 
-      <p className="text-result">
-        {authorList}
-        {year ? `(${year})` : " "} {title}.{" "}
-        {publicationPlace ? `${publicationPlace}: ` : ""}{" "}
-        {publisher ? `${publisher}.` : ""}
-      </p>
+      {referenceVisible && (
+        <p className="text-result">
+          {authorList}
+          {year ? `(${year})` : " "} {title}.{" "}
+          {publicationPlace ? `${publicationPlace}: ` : ""}{" "}
+          {publisher ? `${publisher}.` : ""}
+        </p>
+      )}
 
       <div className="add-citation btn" onClick={() => addReference()}>
         <span>Add to references</span>

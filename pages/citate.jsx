@@ -16,6 +16,7 @@ let Div = styled.div`
       margin-bottom: 2rem;
       display: flex;
       justify-content: center;
+
       button {
         padding: 1rem 2rem;
         min-width: 200px;
@@ -23,15 +24,21 @@ let Div = styled.div`
         margin: 0px 1rem;
         border: 1px solid #63744d;
         cursor: pointer;
-        color: black;
         background-color: #63744d;
         color: white;
       }
 
       .selected {
         color: white;
-
         background-color: #63744d;
+      }
+
+      @media (max-width: 500px) {
+        flex-flow: column;
+
+        button {
+          margin-bottom: 1rem;
+        }
       }
     }
 
@@ -144,8 +151,19 @@ let Div = styled.div`
             display: flex;
             justify-content: space-between;
             align-items: center;
+
+            @media (max-width: 600px) {
+              flex-flow: column;
+
+              button {
+                margin-top: 1rem;
+                padding: 0.8rem;
+                font-size: 14px;
+              }
+            }
           }
         }
+
         button {
           padding: 1rem 2rem;
           /* min-width: 200px; */
@@ -236,7 +254,6 @@ let Citate = () => {
               </motion.div>
             )}
 
-            <button onClick={() => setshowSuccess(!showSuccess)}>click</button>
             {websiteCitationVisible ? (
               <WebsiteCitate
                 populateReferences={populateReferences}
