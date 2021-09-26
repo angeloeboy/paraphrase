@@ -58,7 +58,7 @@ export default function Home() {
       <Nav />
 
       <div className="texts">
-        <h1>For the Dropkicks</h1>
+        <h1>FOR THE DROPKICKS</h1>
       </div>
 
       <div className="features">
