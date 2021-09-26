@@ -10,31 +10,33 @@ let Navigation = styled.nav`
   justify-content: space-between;
   justify-content: center;
   flex-direction: column;
-  /* width: 50%; */
   margin: 0 auto;
 
   .links {
     margin-top: 1rem;
     display: flex;
     justify-content: space-around;
-  }
-
-  a {
-    color: black;
-    text-decoration: none;
-    width: 180px;
-    text-align: center;
-    padding: 5px 10px;
-    transition: all 0.3s ease-in-out;
-    border-bottom: 1px solid green;
-    border-color: transparent;
-    &:hover {
-      color: green;
+    width: 100%;
+    background-color: #333333;
+    a {
+      color: black;
+      text-decoration: none;
+      width: 180px;
+      text-align: center;
+      padding: 5px 10px;
+      transition: all 0.3s ease-in-out;
+      border-bottom: 1px solid green;
+      border-color: transparent;
+      margin: 1rem;
+      color: #b9b9b9;
+      &:hover {
+        color: white;
+      }
     }
   }
 
   .img-container {
-    width: 100px;
+    width: 250px;
   }
 
   @media (max-width: 600px) {
@@ -60,11 +62,14 @@ let Nav = () => {
           <Image src={logo} alt="logo" />
         </Link>
       </div>
+      <div className="texts">
+        <h1>FOR THE DROPKICKS</h1>
+      </div>
 
       <div className="links">
         <Link href="/citate">Citate</Link>
         <Link href="/paraphrase">Paraphrase</Link>
-        <Link href="/grammar-check">Grammar Checking</Link>
+        <Link href="/grammar-check">Grammar</Link>
       </div>
     </Navigation>
   );

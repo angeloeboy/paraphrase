@@ -8,7 +8,7 @@ import Nav from "../components/nav";
 const Div = styled.div`
   margin-top: 1rem;
 
-  .texts {
+  /* .texts {
     text-align: center;
     margin-top: 3rem;
     .subtitle {
@@ -17,7 +17,7 @@ const Div = styled.div`
       margin: 0 auto;
       margin-top: 1rem;
     }
-  }
+  } */
 
   .features {
     display: flex;
@@ -56,10 +56,10 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Nav />
-
+      {/* 
       <div className="texts">
         <h1>FOR THE DROPKICKS</h1>
-      </div>
+      </div> */}
 
       <div className="features">
         <div className="feature">
