@@ -8,18 +8,28 @@ let Navigation = styled.nav`
   align-items: center;
   display: flex;
   justify-content: space-between;
+  justify-content: center;
+  flex-direction: column;
+  /* width: 50%; */
+  margin: 0 auto;
+
+  .links {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: space-around;
+  }
 
   a {
     color: black;
-    margin-right: 1rem;
     text-decoration: none;
-    background-color: #90ff90;
+    width: 180px;
+    text-align: center;
     padding: 5px 10px;
-
-    transition: all 0.3 ease-in-out;
-
+    transition: all 0.3s ease-in-out;
+    border-bottom: 1px solid green;
+    border-color: transparent;
     &:hover {
-      background-color: #5bfd5b;
+      color: green;
     }
   }
 
@@ -27,13 +37,17 @@ let Navigation = styled.nav`
     width: 100px;
   }
 
-  @media (max-width: 550px) {
+  @media (max-width: 600px) {
     flex-direction: column;
 
     .links {
-      margin-top: 1rem;
       display: flex;
       align-items: center;
+      flex-flow: column;
+
+      a {
+        margin-bottom: 1rem;
+      }
     }
   }
 `;

@@ -1,6 +1,10 @@
 import { useState } from "react";
 import styled from "styled-components";
 import Nav from "../components/nav";
+import { motion, AnimatePresence } from "framer-motion";
+import Success from "./../components/success";
+import Image from "next/image";
+import spinner from "../components/images/spinner.gif";
 
 const Div = styled.div`
   * {
@@ -11,6 +15,13 @@ const Div = styled.div`
       Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
+  }
+
+  .popup {
+    position: fixed;
+    top: 0px;
+    left: 50%;
+    transform: translateX(-50%);
   }
 
   .tool {
@@ -97,6 +108,30 @@ const Div = styled.div`
     .errors {
       margin-bottom: 40px;
     }
+
+    .paraphrase-btn {
+      height: 50px !important;
+      position: relative;
+    }
+
+    .spinner {
+      width: 50px;
+      height: 50px;
+      margin: 0 auto;
+      padding: 0px;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      * {
+        margin: 0px;
+        padding: 0px;
+      }
+
+      img {
+        width: 100px;
+      }
+    }
   }
 
   .copy-clear {
@@ -154,6 +189,7 @@ let GrammarCheck = () => {
   const [result, setresult] = useState([]);
   const [corrected, setcorrected] = useState(false);
   const [copied, setcopied] = useState(false);
+  const [finished, setfinished] = useState(false);
 
   let sendText = () => {
     setloading(true);
@@ -178,6 +214,11 @@ let GrammarCheck = () => {
         setresult(result.grammarResult);
         setresultText(origText);
         setloading(false);
+        setfinished(true);
+
+        setTimeout(() => {
+          setfinished(false);
+        }, 1000);
       })
       .catch((error) => console.log("error", error));
   };
@@ -219,6 +260,26 @@ let GrammarCheck = () => {
   return (
     <Div>
       <Nav />
+
+      <div className="popup">
+        <AnimatePresence>
+          {finished && (
+            <motion.div
+              initial={{
+                opacity: 0,
+                y: 0,
+              }}
+              animate={{
+                opacity: 1,
+                y: 24,
+              }}
+              exit={{ opacity: 0, y: 0 }}
+            >
+              <Success />
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
       <div className="grammar-tool tool">
         <h1 className="title"> Grammar Checking Tool</h1>
         <div className="text-inputs">
@@ -282,8 +343,23 @@ let GrammarCheck = () => {
             })}
           </div>
         </div>
-        <div className="fix-btn btn" onClick={() => sendText()}>
-          <span>{loading ? "Loading.." : "Fix"}</span>
+        <div
+          className="paraphrase-btn btn"
+          onClick={() => {
+            if (origText !== "") {
+              sendText();
+            }
+          }}
+        >
+          {loading ? (
+            <div className="spinner">
+              <Image src={spinner} alt="spinner" />
+            </div>
+          ) : (
+            <>
+              <span>Paraphrase </span>
+            </>
+          )}
         </div>
 
         <div className="copy-clear">

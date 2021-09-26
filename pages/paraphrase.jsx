@@ -1,6 +1,10 @@
 import styled from "styled-components";
 import { useState } from "react";
 import Nav from "../components/nav";
+import Success from "../components/success";
+import spinner from "../components/images/spinner.gif";
+import Image from "next/image";
+import { motion, AnimatePresence } from "framer-motion";
 
 const Div = styled.div`
   * {
@@ -11,6 +15,13 @@ const Div = styled.div`
       Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
+  }
+
+  .popup {
+    position: fixed;
+    top: 0px;
+    left: 50%;
+    transform: translateX(-50%);
   }
 
   .tool {
@@ -55,10 +66,13 @@ const Div = styled.div`
         padding: 1rem;
         width: 200px;
         border: none;
+        font-weight: bold;
         cursor: pointer;
         transition: all 0.1s ease-in-out;
+        color: green;
       }
     }
+
     .text-inputs {
       display: flex;
       width: 90%;
@@ -127,6 +141,30 @@ const Div = styled.div`
           margin-top: 1rem;
         }
       }
+
+      .paraphrase-btn {
+        height: 50px !important;
+        position: relative;
+      }
+
+      .spinner {
+        width: 50px;
+        height: 50px;
+        margin: 0 auto;
+        padding: 0px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        * {
+          margin: 0px;
+          padding: 0px;
+        }
+
+        img {
+          width: 100px;
+        }
+      }
     }
 
     .copy-clear {
@@ -164,6 +202,7 @@ const Div = styled.div`
     .paraphrase-btn {
       display: flex;
       margin: 0 auto;
+      color: green;
     }
   }
 `;
@@ -175,6 +214,7 @@ let Paraphrase = () => {
   const [loading, setloading] = useState(false);
   const [paraphraseMode, setparaphraseMode] = useState("standard");
   const [copied, setcopied] = useState(false);
+  const [finished, setfinished] = useState(false);
 
   let handleOrigTextChange = (e) => {
     setorigText(e.target.value);
@@ -192,6 +232,7 @@ let Paraphrase = () => {
 
   let sendText = () => {
     if (charCount < 450) {
+      setfinished(false);
       setloading(true);
       var myHeaders = new Headers();
       myHeaders.append("Content-Type", "application/json");
@@ -212,7 +253,6 @@ let Paraphrase = () => {
         .then((response) => response.json())
         .then((result) => {
           let text = "";
-
           result.text.map((txt, index) => {
             if (index > 0) {
               text = text + " " + txt;
@@ -223,6 +263,12 @@ let Paraphrase = () => {
           setresultText(text);
           console.log(text);
           setloading(false);
+
+          setfinished(true);
+
+          setTimeout(() => {
+            setfinished(false);
+          }, 1000);
         })
         .catch((error) => console.log("error", error));
     }
@@ -240,6 +286,26 @@ let Paraphrase = () => {
   return (
     <Div>
       <Nav />
+      <div className="popup">
+        <AnimatePresence>
+          {finished && (
+            <motion.div
+              initial={{
+                opacity: 0,
+                y: 0,
+              }}
+              animate={{
+                opacity: 1,
+                y: 24,
+              }}
+              exit={{ opacity: 0, y: 0 }}
+            >
+              <Success />
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+
       <div className="paraphrasing-tool tool">
         <h1 className="title"> Paraphrasing Tool</h1>
         <div className="buttons">
@@ -308,22 +374,37 @@ let Paraphrase = () => {
             </span>{" "}
             /450 characters
           </p>
-          <div className="paraphrase-btn btn" onClick={() => sendText()}>
-            <svg
-              className="w-6 h-6 mr-2 -ml-1"
-              fill="none"
-              stroke="white"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"
-              ></path>
-            </svg>
-            <span>{loading ? "Loading.." : "Paraphrase"}</span>
+          <div
+            className="paraphrase-btn btn"
+            onClick={() => {
+              if (origText !== "") {
+                sendText();
+              }
+            }}
+          >
+            {loading ? (
+              <div className="spinner">
+                <Image src={spinner} alt="spinner" />
+              </div>
+            ) : (
+              <>
+                <svg
+                  className="w-6 h-6 mr-2 -ml-1"
+                  fill="none"
+                  stroke="white"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"
+                  ></path>
+                </svg>
+                <span>Paraphrase </span>
+              </>
+            )}
           </div>
 
           <div className="copy-clear">

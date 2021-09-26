@@ -1,5 +1,6 @@
 import { useState } from "react";
 import styled from "styled-components";
+import { motion, AnimatePresence } from "framer-motion";
 
 let References = (props) => {
   const [copied, setcopied] = useState(false);
@@ -16,39 +17,47 @@ let References = (props) => {
     <div className="citation-links box">
       <h1>References</h1>
       <div className="references" id="references">
-        {props.references.map((reference, index) => {
-          return (
-            <div key={index}>
-              <div className="reference-item">
-                <p>{reference}</p>
-                <div className="reference-buttons">
-                  <button
-                    className="delete"
-                    onClick={(e) => deleteReference(e)}
-                    data-index={index}
-                  >
-                    Delete
-                  </button>
+        <AnimatePresence>
+          {props.references.map((reference, index) => {
+            return (
+              <div key={index}>
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                >
+                  <div className="reference-item">
+                    <p>{reference}</p>
+                    <div className="reference-buttons">
+                      <button
+                        className="delete"
+                        onClick={(e) => deleteReference(e)}
+                        data-index={index}
+                      >
+                        Delete
+                      </button>
 
-                  <button
-                    className="copy"
-                    onClick={(e) => {
-                      navigator.clipboard.writeText(reference);
-                      setcopied(true);
+                      <button
+                        className="copy"
+                        onClick={(e) => {
+                          navigator.clipboard.writeText(reference);
+                          setcopied(true);
 
-                      setTimeout(() => {
-                        setcopied(false);
-                      }, 500);
-                    }}
-                    data-index={index}
-                  >
-                    Copy
-                  </button>
-                </div>
+                          setTimeout(() => {
+                            setcopied(false);
+                          }, 500);
+                        }}
+                        data-index={index}
+                      >
+                        Copy
+                      </button>
+                    </div>
+                  </div>
+                </motion.div>
               </div>
-            </div>
-          );
-        })}
+            );
+          })}
+        </AnimatePresence>
       </div>
     </div>
   );

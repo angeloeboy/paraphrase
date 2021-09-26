@@ -3,10 +3,18 @@ import { useState, useEffect } from "react";
 import References from "./../components/references";
 import WebsiteCitate from "../components/websiteCitate";
 import BookCitate from "../components/bookCitate";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import Nav from "../components/nav";
+import spinner from "../components/images/spinner.gif";
+import Success from "../components/success";
 
 let Div = styled.div`
+  .popup {
+    position: fixed;
+    top: 0px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
   .citation-tool {
     .citation-title {
       text-align: center;
@@ -23,10 +31,11 @@ let Div = styled.div`
         min-width: 200px;
         font-size: 1rem;
         margin: 0px 1rem;
-        border: 1px solid #63744d;
         cursor: pointer;
-        background-color: #63744d;
-        color: white;
+        background-color: #a9d191;
+
+        border: none;
+        transition: all 0.3s ease-in-out;
       }
 
       .selected {
@@ -94,11 +103,11 @@ let Div = styled.div`
             padding: 1rem;
             min-width: 100px;
             margin: 10px;
-            border: 1px solid #63744d;
+            border: none;
             cursor: pointer;
             color: black;
-            background-color: #63744d;
-            color: white;
+            background-color: #c3dfb2;
+            text-align: center;
           }
           div {
             display: flex;
@@ -120,7 +129,8 @@ let Div = styled.div`
           margin-top: 2rem;
           display: inline-block;
           width: initial;
-          background-color: #63744d;
+          background-color: #c3dfb2;
+          color: black;
           margin-right: 20px;
         }
 
@@ -150,16 +160,6 @@ let Div = styled.div`
             border-radius: 0.5rem;
             width: 100%;
 
-            /* @media (max-width: 600px) {
-              flex-flow: column;
-
-              button {
-                margin-top: 1rem;
-                padding: 0.8rem;
-                font-size: 14px;
-              }
-            } */
-
             .reference-buttons {
               margin-top: 1rem;
 
@@ -175,11 +175,20 @@ let Div = styled.div`
               }
 
               .delete {
-                background-color: red;
+                background-color: #ff5353;
+
+                &:hover {
+                  background-color: #fa2d2d;
+                }
               }
 
               .copy {
-                background-color: #63744d;
+                background-color: #c3dfb2;
+                color: black;
+
+                &:hover {
+                  background-color: #91e75b;
+                }
               }
             }
           }
@@ -219,6 +228,7 @@ let Citate = () => {
   const [references, setreferences] = useState([]);
   const [websiteCitationVisible, setwebsiteCitationVisible] = useState(true);
   const [showSuccess, setshowSuccess] = useState(false);
+  const [citateMode, setcitateMode] = useState("website");
 
   let populateReferences = () => {
     let references = localStorage.getItem("sources");
@@ -239,14 +249,34 @@ let Citate = () => {
         <div className="container">
           <div className="citation-area box">
             <div className="buttons">
-              <button onClick={() => setwebsiteCitationVisible(true)}>
+              <button
+                onClick={() => {
+                  setwebsiteCitationVisible(true);
+                  setcitateMode("website");
+                }}
+                style={
+                  citateMode == "website"
+                    ? { backgroundColor: "#c3dfb2" }
+                    : { backgroundColor: "#deecd5" }
+                }
+              >
                 Website
               </button>
-              <button onClick={() => setwebsiteCitationVisible(false)}>
+              <button
+                onClick={() => {
+                  setwebsiteCitationVisible(false);
+                  setcitateMode("book");
+                }}
+                style={
+                  citateMode == "book"
+                    ? { backgroundColor: "#c3dfb2" }
+                    : { backgroundColor: "#deecd5" }
+                }
+              >
                 Book
               </button>
             </div>
-            {showSuccess && (
+            {/* {showSuccess && (
               <motion.div
                 initial="pageInitial"
                 animate="pageAnimate"
@@ -262,7 +292,27 @@ let Citate = () => {
               >
                 <div className="success">Success!</div>
               </motion.div>
-            )}
+            )} */}
+
+            <div className="popup">
+              <AnimatePresence>
+                {showSuccess && (
+                  <motion.div
+                    initial={{
+                      opacity: 0,
+                      y: 0,
+                    }}
+                    animate={{
+                      opacity: 1,
+                      y: 24,
+                    }}
+                    exit={{ opacity: 0, y: 0 }}
+                  >
+                    <Success />
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
 
             {websiteCitationVisible ? (
               <WebsiteCitate

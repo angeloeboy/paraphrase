@@ -2,9 +2,14 @@ import styled from "styled-components";
 import { useState, useEffect } from "react";
 
 const Div = styled.div`
+  h3 {
+    margin-bottom: 1rem;
+  }
   .books {
+    margin-bottom: rem;
+
     .book {
-      background-color: yellow;
+      background-color: #deecd5;
       padding: 1rem;
       margin-bottom: 1rem;
     }
@@ -37,6 +42,16 @@ let BookCitate = ({ populateReferences, setshowSuccess }) => {
   const [addedAuthorInitial, setaddedAuthorInitial] = useState("");
   const [addedAuthorName, setaddedAuthorName] = useState("");
   const [referenceVisible, setreferenceVisible] = useState(false);
+
+  let clearText = () => {
+    setauthor([]);
+    setyear("");
+    settitle("");
+    setpublisher("");
+    setpublicationPlace("");
+
+    setreferenceVisible(false);
+  };
 
   useEffect(() => {
     let text = "";
@@ -213,7 +228,7 @@ let BookCitate = ({ populateReferences, setshowSuccess }) => {
       </label>
       {booksVisible && (
         <div className="books">
-          <h1>Select which book</h1>
+          <h3>Select which book</h3>
           {books.map((book, index) => {
             return (
               <div
@@ -321,6 +336,10 @@ let BookCitate = ({ populateReferences, setshowSuccess }) => {
 
       <div className="add-citation btn" onClick={() => addReference()}>
         <span>Add to references</span>
+      </div>
+
+      <div className="clear-btn btn" onClick={() => clearText()}>
+        <p>Clear all</p>
       </div>
     </Div>
   );
