@@ -244,7 +244,7 @@ let GrammarCheck = () => {
   };
 
   let handleReplacementClick = (text, correctedText, indx) => {
-    let texts = resultText.replace(correctedText, text);
+    let texts = origText.replace(correctedText, text);
     setorigText(texts);
 
     let resultARr = result;
