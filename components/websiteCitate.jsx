@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
+import { motion, AnimatePresence } from "framer-motion";
+import Success from "./success";
 
 let WebsiteCitate = ({ populateReferences }) => {
   const [author, setauthor] = useState([]);
@@ -15,7 +17,7 @@ let WebsiteCitate = ({ populateReferences }) => {
   const [dayAccessed, setdayAccessed] = useState("");
   const [monthAccessed, setmonthAccessed] = useState("");
   const [yearAccessed, setyearAccessed] = useState("");
-
+  const [error, seterror] = useState(false);
   useEffect(() => {
     let text = "";
     author.map((aut, index) => {
@@ -117,47 +119,69 @@ let WebsiteCitate = ({ populateReferences }) => {
     setyearPublished("");
     setpageTitle("");
     setdateAccessed([]);
-    setauthor([{ initials: "", family: "" }]);
+    setauthor([]);
+    setmonthAccessed("");
+    setdayAccessed("");
+    setyearAccessed("");
 
-    fetch(
-      `https://api.allorigins.win/get?url=${encodeURIComponent(
-        `https://citation-generator.scribbr.com/v2/webpages?q=${websiteLink}`
-      )}`
-    )
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    var raw = JSON.stringify({
+      link: websiteLink,
+    });
+
+    var requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow",
+    };
+
+    fetch("http://localhost:3000/api/web-citate", requestOptions)
       .then((response) => response.json())
       .then((data) => {
-        let infos = JSON.parse(data.contents).data;
-        console.log(infos);
+        if (data.errors == undefined) {
+          let infos = data.data;
+          console.log(data);
 
-        if (infos !== undefined) {
-          if (infos.attributes.author[0] !== undefined) {
-            console.log(infos.attributes.author);
+          if (infos !== undefined) {
+            if (infos.attributes.author[0] !== undefined) {
+              console.log(infos.attributes.author);
 
-            let authors = infos.attributes.author.filter((auth) =>
-              auth.type == "organization" ? false : true
+              let authors = infos.attributes.author.filter((auth) =>
+                auth.type == "organization" ? false : true
+              );
+
+              console.log(authors);
+              setauthor(authors);
+            } else {
+              console.log("False");
+            }
+
+            setyearPublished(
+              infos.attributes.issued[0] !== undefined
+                ? infos.attributes.issued[0][0]
+                : ""
             );
 
-            console.log(authors);
-            setauthor(authors);
-          } else {
-            console.log("False");
+            let date = infos.attributes.accessed[0];
+            console.log(date);
+            setyearAccessed(date[0]);
+            setmonthAccessed(getMonth(date[1]));
+            setdayAccessed(date[2]);
+
+            setdateAccessed(infos.attributes.accessed[0]);
+            setpageTitle(infos.attributes.title);
+            setreferenceVisible(true);
+            seterror(false);
           }
+        } else {
+          seterror(true);
 
-          setyearPublished(
-            infos.attributes.issued[0] !== undefined
-              ? infos.attributes.issued[0][0]
-              : ""
-          );
-
-          let date = infos.attributes.accessed[0];
-          console.log(date);
-          setyearAccessed(date[0]);
-          setmonthAccessed(getMonth(date[1]));
-          setdayAccessed(date[2]);
-
-          setdateAccessed(infos.attributes.accessed[0]);
-          setpageTitle(infos.attributes.title);
-          setreferenceVisible(true);
+          setTimeout(() => {
+            seterror(false);
+          }, 1000);
         }
 
         setloading(false);
@@ -233,6 +257,26 @@ let WebsiteCitate = ({ populateReferences }) => {
           setreferenceVisible(false);
         }}
       />
+
+      <div className="popup">
+        <AnimatePresence>
+          {error && (
+            <motion.div
+              initial={{
+                opacity: 0,
+                y: 0,
+              }}
+              animate={{
+                opacity: 1,
+                y: 24,
+              }}
+              exit={{ opacity: 0, y: 0 }}
+            >
+              <Success text="Error finding website details. Please input manually" />
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
 
       <div className="result">
         <div className="author">

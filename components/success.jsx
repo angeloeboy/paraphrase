@@ -9,10 +9,10 @@ const Div = styled.div`
   border-radius: 0.5rem;
 `;
 
-let Success = () => {
+let Success = (props) => {
   return (
     <Div>
-      <p>Success!</p>
+      <p>{props.text ? props.text : "Success!"}</p>
     </Div>
   );
 };
