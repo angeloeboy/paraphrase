@@ -138,7 +138,7 @@ let WebsiteCitate = ({ populateReferences }) => {
       redirect: "follow",
     };
 
-    fetch("http://localhost:3000/api/web-citate", requestOptions)
+    fetch("/api/web-citate", requestOptions)
       .then((response) => response.json())
       .then((data) => {
         if (data.errors == undefined) {
