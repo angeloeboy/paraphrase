@@ -229,9 +229,10 @@ let GrammarCheck = () => {
     setTimeout(() => {
       setcopied(false);
     }, 500);
-    navigator.clipboard.writeText(resultText);
+    navigator.clipboard.writeText(origText);
   };
 
+  //get the text that needs to be edited
   let correctedText = (offset, length) => {
     let originalText = origText;
     let text = "";
@@ -243,6 +244,7 @@ let GrammarCheck = () => {
     return text;
   };
 
+  //handles the replacing of replacement word
   let handleReplacementClick = (text, correctedText, indx) => {
     let texts = origText.replace(correctedText, text);
     setorigText(texts);
