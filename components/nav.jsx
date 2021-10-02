@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/link-passhref */
 import Link from "next/link";
 import styled from "styled-components";
 import logo from "../components/images/inktoollogo.png";
@@ -6,6 +7,11 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 
 let Navigation = styled.nav`
+  * {
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+  }
   padding: 20px 10% !important;
   align-items: center;
   display: flex;
@@ -25,18 +31,17 @@ let Navigation = styled.nav`
     a {
       color: black;
       text-decoration: none;
-      width: 100%;
       text-align: center;
-      padding: 5px 10px;
       transition: all 0.3s ease-in-out;
       border-bottom: 1px solid green;
       border-color: transparent;
-      padding: 1rem;
       color: #e1ffce;
       font-size: 1.5rem;
       font-weight: bold;
       width: 100%;
-      /* background-color: green; */
+      padding: 0px;
+      /* padding: 20px 0px !important; */
+
       &:hover {
         color: white;
       }
@@ -66,6 +71,18 @@ let Navlink = styled.div`
   padding: 20px 0px !important;
   width: 33.33%;
   text-align: center;
+  color: black;
+  text-decoration: none;
+  text-align: center;
+  transition: all 0.3s ease-in-out;
+  border-bottom: 1px solid green;
+  border-color: transparent;
+  color: #e1ffce;
+  font-size: 1.5rem;
+  font-weight: bold;
+  width: 100%;
+  padding: 0px;
+  cursor: pointer;
 `;
 
 let Nav = () => {
@@ -88,34 +105,41 @@ let Nav = () => {
       </div>
 
       <div className="links">
-        <Navlink
-          style={
-            link == "/citate"
-              ? { backgroundColor: "#62744c" }
-              : { backgroundColor: "#a9d191" }
-          }
-        >
-          <Link href="/citate">Citate</Link>
-        </Navlink>
+        <Link href="/paraphrase">
+          <Navlink
+            style={
+              link == "/paraphrase"
+                ? { backgroundColor: "#62744c" }
+                : { backgroundColor: "#a9d191" }
+            }
+          >
+            Paraphrase
+          </Navlink>
+        </Link>
 
-        <Navlink
-          style={
-            link == "/paraphrase"
-              ? { backgroundColor: "#62744c" }
-              : { backgroundColor: "#a9d191" }
-          }
-        >
-          <Link href="/paraphrase">Paraphrase</Link>
-        </Navlink>
-        <Navlink
-          style={
-            link == "/grammar-check"
-              ? { backgroundColor: "#62744c" }
-              : { backgroundColor: "#a9d191" }
-          }
-        >
-          <Link href="/grammar-check">Grammar</Link>
-        </Navlink>
+        <Link href="/grammar-check">
+          <Navlink
+            style={
+              link == "/grammar-check"
+                ? { backgroundColor: "#62744c" }
+                : { backgroundColor: "#a9d191" }
+            }
+          >
+            Grammar
+          </Navlink>
+        </Link>
+
+        <Link href="/citate">
+          <Navlink
+            style={
+              link == "/citate"
+                ? { backgroundColor: "#62744c" }
+                : { backgroundColor: "#a9d191" }
+            }
+          >
+            Citate
+          </Navlink>
+        </Link>
       </div>
     </Navigation>
   );

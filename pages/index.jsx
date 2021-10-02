@@ -8,21 +8,11 @@ import Nav from "../components/nav";
 const Div = styled.div`
   margin-top: 1rem;
 
-  /* .texts {
-    text-align: center;
-    margin-top: 3rem;
-    .subtitle {
-      width: 100%;
-      max-width: 600px;
-      margin: 0 auto;
-      margin-top: 1rem;
-    }
-  } */
-
   .features {
     display: flex;
     flex-wrap: wrap;
     padding: 5%;
+    justify-content: center;
     .feature {
       width: 45%;
       background-color: #f2fdf2;
