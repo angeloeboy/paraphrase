@@ -8,10 +8,6 @@
   box-sizing: border-box;
 }
 
-body {
-  /* padding-bottom: 40px; */
-}
-
 .tool .title {
   font-size: 48px;
   text-align: center;

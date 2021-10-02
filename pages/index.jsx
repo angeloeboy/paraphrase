@@ -6,14 +6,12 @@ import styled from "styled-components";
 import Nav from "../components/nav";
 
 const Div = styled.div`
-  background-color: #202020;
-
   .features {
     display: flex;
     flex-wrap: wrap;
     padding: 5%;
     justify-content: center;
-    margin-top: 2rem;
+    padding-top: 2rem;
 
     .feature {
       width: 45%;
