@@ -1,6 +1,7 @@
 import { useState } from "react";
 import styled from "styled-components";
 import { motion, AnimatePresence } from "framer-motion";
+import Success from "./success";
 
 let References = (props) => {
   const [copied, setcopied] = useState(false);
@@ -15,6 +16,26 @@ let References = (props) => {
 
   return (
     <div className="citation-links box">
+      <div className="popup">
+        <AnimatePresence>
+          {copied && (
+            <motion.div
+              initial={{
+                opacity: 0,
+                y: 0,
+              }}
+              animate={{
+                opacity: 1,
+                y: 24,
+              }}
+              exit={{ opacity: 0, y: 0 }}
+            >
+              <Success text="Copied to clipboard" />
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+
       <h1>References</h1>
       <div className="references" id="references">
         <AnimatePresence>
