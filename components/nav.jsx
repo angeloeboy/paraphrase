@@ -12,6 +12,7 @@ let Navigation = styled.nav`
     padding: 0px;
     box-sizing: border-box;
   }
+
   padding: 20px 10% !important;
   align-items: center;
   display: flex;
@@ -20,6 +21,9 @@ let Navigation = styled.nav`
   flex-direction: column;
   margin: 0 auto;
 
+  h1 {
+    color: white;
+  }
   .links {
     margin-top: 3rem;
     display: flex;
